@@ -50,8 +50,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {getAppointmentsForDay(state, state.day).map(appointment => {
-          console.log(getInterview(state, appointment.interview))
-          return <Appointment key={appointment.id} interview={getInterview(state, appointment.interview)} {...appointment} />
+          return <Appointment key={appointment.id} interview={getInterview(state, appointment.interview)} id={appointment.id} time={appointment.time} />
         })}
         <Appointment key="last" time="5pm" />
       </section>
