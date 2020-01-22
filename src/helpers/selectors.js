@@ -8,6 +8,16 @@ export default function getAppointmentsForDay(state, day) {
   return appointmentArray;
 }
 
+export const getInterviewersForDay = function(state, day) {
+  const interviewerArray = []
+  const matchedDay = state.days.filter(element => element.name === day)
+  if(matchedDay.length > 0 && matchedDay[0].interviewers.length > 0) {
+    matchedDay[0].interviewers.forEach(interviewer => 
+      interviewerArray.push(state.interviewers[interviewer]))
+  }
+  return interviewerArray;
+}
+
 export const getInterview = function (state, interview) {
   let result = null;
   if (interview) {
