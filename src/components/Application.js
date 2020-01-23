@@ -22,26 +22,20 @@ export default function Application(props) {
       ...state.appointments[id],
       interview: { ...interview }
     };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
 
     return axios.put(`/api/appointments/${id}`, {interview})
-    .then(setState({...state, appointments}))
-    .catch((error) => console.log(error))
+    .then(() => setState( prev => ({...prev, appointments: {...prev.appointments, [id]: appointment}})))
   }
 
   function cancelInterview(id) {
     
     const appointment = {
-      ...state.appointment[id], 
+      ...state.appointments[id], 
       interview: null
     }
-    const appointments = {
-      ...state.appointments, 
-      [id]: appointment
-    }
+
+    return axios.delete(`api/appointments/${id}`)
+    .then(() => setState( prev => ({...prev, appointments: {...prev.appointments, [id]: appointment}})))
   }
 
   useEffect(() => {
@@ -84,7 +78,8 @@ export default function Application(props) {
           interview={getInterview(state, appointment.interview)} 
           id={appointment.id} time={appointment.time} 
           interviewers={getInterviewersForDay(state, state.day)}
-          bookInterview={bookInterview}/>
+          bookInterview={bookInterview}
+          cancelInterview={cancelInterview}/>
         })}
         <Appointment key="last" time="5pm" />
       </section>
