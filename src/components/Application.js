@@ -17,7 +17,31 @@ export default function Application(props) {
   const setDay = day => setState({ ...state, day });
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(setState({...state, appointments}))
+    .catch((error) => console.log(error))
+  }
+
+  function cancelInterview(id) {
+    
+    const appointment = {
+      ...state.appointment[id], 
+      interview: null
+    }
+    const appointments = {
+      ...state.appointments, 
+      [id]: appointment
+    }
   }
 
   useEffect(() => {
