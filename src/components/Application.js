@@ -16,7 +16,7 @@ export default function Application(props) {
     cancelInterview
   } = useApplicationData();
 
-  console.log("this is state in application", state)
+  console.log("this is state in Application", state)
 
   return (
     <main className="layout">

@@ -8,7 +8,7 @@ const SET_INTERVIEW = "SET_INTERVIEW";
 function reducer(state, action) {
   switch (action.type) {
     case SET_DAY:
-      return { ...state }
+      return { ...state, day: action.day }
     case SET_APPLICATION_DATA:
       return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers }
     case SET_INTERVIEW:
@@ -64,10 +64,6 @@ export default function useApplicationData() {
   }
 
   function cancelInterview(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    }
     return axios.delete(`api/appointments/${id}`)
       .then(() => {
         const dayObject = state.days.find(day => day.name === state.day);
