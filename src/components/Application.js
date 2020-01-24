@@ -17,7 +17,7 @@ export default function Application(props) {
     editInterview
   } = useApplicationData();
 
-  console.log("this is state in Application", state)
+  console.log(state)
 
   return (
     <main className="layout">

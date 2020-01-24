@@ -4,6 +4,7 @@ import { useEffect, useReducer } from "react";
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
+const SET_SOCKET = "SET_SOCKET"
 
 function reducer(state, action) {
   switch (action.type) {
@@ -13,16 +14,24 @@ function reducer(state, action) {
       return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers }
     case SET_INTERVIEW:
       const { id, interview } = action;
+      const appointments = {
+        ...state.appointments,
+        [id]: {
+          ...state.appointments[action.id],
+          interview: action.interview ? { ...interview } : null
+        }
+      };
+      const days = JSON.parse(JSON.stringify(state.days));
+      const dayIndex = state.days.findIndex(day => day.name === state.day);
+      const day = days[dayIndex];
+      days[dayIndex].spots = day.appointments.length - day.appointments.filter(appt => appointments[appt].interview).length;
       return {
         ...state,
-        appointments: {
-          ...state.appointments,
-          [id]: {
-            ...state.appointments[action.id],
-            interview: action.interview ? { ...interview } : null
-          }
-        }
-      }
+        days,
+        appointments 
+      };
+    case SET_SOCKET:
+      return { ...state, socket: action }
     default: throw new Error(`Tried to reduce with unsupported action type: ${action.type}`)
   }
 }
@@ -34,6 +43,23 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8001")
+    socket.addEventListener('open', function () {
+      dispatch({ type: SET_SOCKET, value: socket })
+    })
+    socket.onopen = function (event) {
+      socket.send("ping");
+    }
+    socket.addEventListener('message', function(message) {
+      const event = JSON.parse(message.data)
+      if (event.type === "SET_INTERVIEW") {
+      dispatch({ ...event })
+      }
+    })
+    return () => { socket.close(); }
+  }, []);
 
   useEffect(() => {
     Promise.all([axios.get("/api/days"), axios.get("/api/appointments"), axios.get("/api/interviewers")])
@@ -57,8 +83,6 @@ export default function useApplicationData() {
     };
     return axios.put(`/api/appointments/${id}`, appointment)
       .then(() => {
-        const dayObject = state.days.find(day => day.name === state.day);
-        state.days[dayObject.id - 1].spots--;
         dispatch({ type: SET_INTERVIEW, id, interview })
       })
   }
@@ -74,12 +98,10 @@ export default function useApplicationData() {
       })
   }
 
-
   function cancelInterview(id) {
     return axios.delete(`api/appointments/${id}`)
       .then(() => {
-        const dayObject = state.days.find(day => day.name === state.day);
-        state.days[dayObject.id - 1].spots++;
+        
         dispatch({ type: SET_INTERVIEW, id, interview: null })
       })
   }
