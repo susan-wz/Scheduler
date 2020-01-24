@@ -35,26 +35,6 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
-  const setDay = day => dispatch({ type: SET_DAY, day })
-
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview
-    };
-    return axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => dispatch({ type: SET_INTERVIEW, id, interview }))
-  }
-
-  function cancelInterview(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    }
-    return axios.delete(`api/appointments/${id}`)
-      .then(() => dispatch({ type: SET_INTERVIEW, id, interview: null }))
-  }
-
   useEffect(() => {
     Promise.all([axios.get("/api/days"), axios.get("/api/appointments"), axios.get("/api/interviewers")])
       .then((all) => {
@@ -67,6 +47,34 @@ export default function useApplicationData() {
       })
       .catch((error) => console.log(error))
   }, [])
+
+  const setDay = day => dispatch({ type: SET_DAY, day })
+
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview
+    };
+    return axios.put(`/api/appointments/${id}`, appointment)
+      .then(() => {
+        const dayObject = state.days.find(day => day.name === state.day);
+        state.days[dayObject.id - 1].spots--;
+        dispatch({ type: SET_INTERVIEW, id, interview })
+      })
+  }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    }
+    return axios.delete(`api/appointments/${id}`)
+      .then(() => {
+        const dayObject = state.days.find(day => day.name === state.day);
+        state.days[dayObject.id - 1].spots++;
+        dispatch({ type: SET_INTERVIEW, id, interview: null })
+      })
+  }
 
   return { state, setDay, bookInterview, cancelInterview }
 }
