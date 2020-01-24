@@ -87,17 +87,6 @@ export default function useApplicationData() {
       })
   }
 
-  function editInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview
-    };
-    return axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => {
-        dispatch({ type: SET_INTERVIEW, id, interview })
-      })
-  }
-
   function cancelInterview(id) {
     return axios.delete(`api/appointments/${id}`)
       .then(() => {
@@ -106,5 +95,5 @@ export default function useApplicationData() {
       })
   }
 
-  return { state, setDay, bookInterview, cancelInterview, editInterview }
+  return { state, setDay, bookInterview, cancelInterview }
 }
