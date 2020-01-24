@@ -13,7 +13,8 @@ export default function Application(props) {
     state,
     setDay,
     bookInterview,
-    cancelInterview
+    cancelInterview, 
+    editInterview
   } = useApplicationData();
 
   console.log("this is state in Application", state)
@@ -48,6 +49,7 @@ export default function Application(props) {
           id={appointment.id} time={appointment.time} 
           interviewers={getInterviewersForDay(state, state.day)}
           bookInterview={bookInterview}
+          editInterview={editInterview}
           cancelInterview={cancelInterview}/>
         })}
         <Appointment key="last" time="5pm" />
