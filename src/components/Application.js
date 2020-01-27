@@ -17,11 +17,6 @@ export default function Application(props) {
     editInterview
   } = useApplicationData();
 
-<<<<<<< Updated upstream
-  console.log("this is state in Application", state)
-
-=======
->>>>>>> Stashed changes
   return (
     <main className="layout">
       <section className="sidebar">

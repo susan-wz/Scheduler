@@ -20,7 +20,6 @@ const ERROR_SAVE = "ERROR_SAVE"
 const ERROR_DELETE = "ERROR_DELETE"
 
 export default function Appointment(props) {
-  debugger
 
   function save(name, interviewer) {
     const interview = {
@@ -63,7 +62,7 @@ export default function Appointment(props) {
     <article className="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && (
+      {mode === SHOW && props.interview.student && (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
