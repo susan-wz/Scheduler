@@ -6,7 +6,7 @@ describe("Appointments", () => {
     cy.contains('[data-testid=day]', "Monday")
   })
 
-  xit("should book an interview", () => {
+  it("should book an interview", () => {
   
     cy.get('[alt=Add]').first().click()
 
@@ -20,7 +20,7 @@ describe("Appointments", () => {
 
   });
 
-  xit("should edit an interview", () => {
+  it("should edit an interview", () => {
     cy.get("[alt=Edit]").first().click({ force: true })
     cy.get("[alt='Tori Malcolm']").click()
     cy.get("[data-testid=student-name-input]").clear().type("Test Name")
@@ -32,7 +32,7 @@ describe("Appointments", () => {
   });
 
   it("should cancel an interview", () => {
-    cy.get("[alt=Delete]").first().click({ force: true })
+    cy.get("[alt=Delete]").click({ force: true })
     cy.contains("Confirm").click();
 
     cy.contains("Deleting")
