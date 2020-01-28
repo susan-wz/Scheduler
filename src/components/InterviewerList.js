@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 InterviewerList.propTypes = {
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired
-}
+};
 
 export default function InterviewerList(props) {
   const interviewers = props.interviewers.map(interviewer => {
@@ -21,4 +21,4 @@ export default function InterviewerList(props) {
     <h4 className="interviewers__header text--light">Interviewer</h4>
     <ul className="interviewers__list">{interviewers}</ul>
   </section>);
-}
+};

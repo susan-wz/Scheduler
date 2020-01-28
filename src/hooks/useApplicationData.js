@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useReducer } from "react";
-import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_SOCKET } from "reducers/application"
+import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_SOCKET } from "reducers/application";
 
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
@@ -10,6 +10,7 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
+  // websocket connection
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:8001")
     socket.addEventListener('open', function () {
@@ -18,15 +19,16 @@ export default function useApplicationData() {
     socket.onopen = function (event) {
       socket.send("ping");
     }
-    socket.addEventListener('message', function(message) {
+    socket.addEventListener('message', function (message) {
       const event = JSON.parse(message.data)
       if (event.type === "SET_INTERVIEW") {
-      dispatch({ ...event })
+        dispatch({ ...event })
       }
     })
     return () => { socket.close(); }
   }, []);
 
+  // populates data from api on page load
   useEffect(() => {
     Promise.all([axios.get("/api/days"), axios.get("/api/appointments"), axios.get("/api/interviewers")])
       .then((all) => {
@@ -38,7 +40,7 @@ export default function useApplicationData() {
         })
       })
       .catch((error) => console.log(error))
-  }, [])
+  }, []);
 
   const setDay = day => dispatch({ type: SET_DAY, day })
 
@@ -51,14 +53,14 @@ export default function useApplicationData() {
       .then(() => {
         dispatch({ type: SET_INTERVIEW, id, interview })
       })
-  }
+  };
 
   function cancelInterview(id) {
     return axios.delete(`api/appointments/${id}`)
       .then(() => {
         dispatch({ type: SET_INTERVIEW, id, interview: null })
       })
-  }
+  };
 
   return { state, setDay, bookInterview, cancelInterview }
-}
+};

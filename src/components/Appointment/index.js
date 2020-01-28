@@ -15,9 +15,9 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
-const EDIT = "EDIT"
-const ERROR_SAVE = "ERROR_SAVE"
-const ERROR_DELETE = "ERROR_DELETE"
+const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
 
@@ -30,31 +30,33 @@ export default function Appointment(props) {
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch(() => transition(ERROR_SAVE, true))
-  }
+  };
 
   function destroy(name, interviewer) {
     const interview = {
       student: name,
       interviewer
-    }
+    };
     transition(DELETING, true)
     props.cancelInterview(props.id, interview)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
-  }
+  };
 
+  // hook to show appointment views and transition between them
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  // ensures that updates via websockets are synchronised
   useEffect(() => {
     if (props.interview && mode === EMPTY) {
-     transition(SHOW);
-    }
+      transition(SHOW);
+    };
     if (props.interview === null && mode === SHOW) {
-     transition(EMPTY);
-    }
-   }, [props.interview, transition, mode]);
+      transition(EMPTY);
+    };
+  }, [props.interview, transition, mode]);
 
   return (
     <article className="appointment" data-testid="appointment" >
@@ -67,7 +69,7 @@ export default function Appointment(props) {
           onDelete={() => transition(CONFIRM)}
           onEdit={() => transition(EDIT)}
         />
-      )}
+      )};
       {mode === CREATE && <Form interviewers={props.interviewers} onCancel={back} onSave={save} />}
       {mode === SAVING && <Status message="Saving" />}
       {mode === DELETING && <Status message="Deleting" />}
@@ -77,4 +79,4 @@ export default function Appointment(props) {
       {mode === ERROR_DELETE && <Error message="Could not delete appointment" onClose={back} />}
     </article>
   );
-}
+};
