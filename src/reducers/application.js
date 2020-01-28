@@ -11,16 +11,22 @@ export default function reducer(state, action) {
       return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers }
     case SET_INTERVIEW:
       const { id, interview } = action;
+      const appointments = {
+        ...state.appointments,
+        [id]: {
+          ...state.appointments[action.id],
+          interview: action.interview ? { ...interview } : null
+        }
+      };
+      const days = JSON.parse(JSON.stringify(state.days));
+      const dayIndex = state.days.findIndex(day => day.name === state.day);
+      const day = days[dayIndex];
+      days[dayIndex].spots = day.appointments.length - day.appointments.filter(appt => appointments[appt].interview).length;
       return {
         ...state,
-        appointments: {
-          ...state.appointments,
-          [id]: {
-            ...state.appointments[action.id],
-            interview: action.interview ? { ...interview } : null
-          }
-        }
-      }
+        days,
+        appointments 
+      };
     case SET_SOCKET:
       return { ...state, socket: action }
     default: throw new Error(`Tried to reduce with unsupported action type: ${action.type}`)
