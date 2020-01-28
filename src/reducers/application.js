@@ -1,6 +1,7 @@
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
+const SET_SOCKET = "SET_SOCKET";
 
 export default function reducer(state, action) {
   switch (action.type) {
@@ -20,8 +21,10 @@ export default function reducer(state, action) {
           }
         }
       }
+    case SET_SOCKET:
+      return { ...state, socket: action }
     default: throw new Error(`Tried to reduce with unsupported action type: ${action.type}`)
   }
 }
 
-export { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW }
+export { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_SOCKET }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useReducer } from "react";
-import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW } from "reducers/application"
+import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_SOCKET } from "reducers/application"
 
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
