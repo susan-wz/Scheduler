@@ -30,14 +30,19 @@ npm run storybook
 
 # Final Product
 
+### Initial view - small screens
 !["Initial view - small screens"](https://github.com/susan-wz/Scheduler/blob/master/docs/initial-small-screen.png?raw=true)
 
+### Initial view - large screens
 !["Initial view - large screens"](https://github.com/susan-wz/Scheduler/blob/master/docs/initial-large-screen.png?raw=true)
 
-!["View when hovering on an appointment"](https://github.com/susan-wz/Scheduler/blob/master/docs/interview-hover.png?raw=true)
+### View when hovering on an interview
+!["View when hovering on an interview"](https://github.com/susan-wz/Scheduler/blob/master/docs/interview-hover.png?raw=true)
 
+### Form for creating and editing interviews
 !["Form for creating and editing interviews"](https://github.com/susan-wz/Scheduler/blob/master/docs/create-and-edit-form.png?raw=true)
 
+### Confirmation on delete
 !["Confirmation on delete"](https://github.com/susan-wz/Scheduler/blob/master/docs/delete-confirmation.png?raw=true)
 
 ## Dependencies
